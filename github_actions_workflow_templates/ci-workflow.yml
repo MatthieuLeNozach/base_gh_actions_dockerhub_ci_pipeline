@@ -13,9 +13,13 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Load environment variables
+        run: |
+          cat docker-image-ci.env >> $GITHUB_ENV
+
       - name: Pull the latest Docker Image
         run: |
-          docker pull ${{ secrets.DOCKER_USERNAME }}/${{ github.event.workflow_run.head_repository.name }}:latest
+          docker pull ${{ secrets.DOCKER_USERNAME }}/${{ env.DOCKER_REPO }}:latest
 
       - name: Run tests with docker-compose
         run: |
