@@ -25,7 +25,7 @@ jobs:
           
       - name: Pull the latest Docker Image
         run: |
-          docker pull ${{ secrets.DOCKER_USERNAME }}/${{ env.DOCKER_REPO }}:latest
+          docker pull ${{ env.DOCKERIMAGE_LATEST }}
 
       - name: Run tests with docker-compose
         run: |
