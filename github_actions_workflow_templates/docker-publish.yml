@@ -41,4 +41,3 @@ jobs:
         TIMESTAMP=$(date +%Y%m%d%H%M%S)
         docker push ${{ secrets.DOCKER_USERNAME }}/${{ env.DOCKER_REPO }}:${{ env.DOCKER_TAG }}-$TIMESTAMP
         docker push ${{ secrets.DOCKER_USERNAME }}/${{ env.DOCKER_REPO }}:latest
-
