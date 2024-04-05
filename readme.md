@@ -35,4 +35,4 @@ Tests are run against the new images' container, the push or pull request become
 #### **Attempts logs**
 - 240305:
   - 16h22 modified secrets
-  - 16h30 fixed typo
+  - 16h30 fixed typo **SUCCESS**
