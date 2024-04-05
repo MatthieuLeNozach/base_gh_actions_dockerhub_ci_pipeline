@@ -6,7 +6,7 @@ on:
     types:
       - completed
 
-jobs:  # This line should align with 'on' to correctly define the 'jobs' section
+jobs:
   test:
     runs-on: ubuntu-latest
 
@@ -17,7 +17,6 @@ jobs:  # This line should align with 'on' to correctly define the 'jobs' section
         uses: actions/download-artifact@v2
         with:
           name: env-vars
-          workflow: Docker Image CI
           
       - name: Load environment variables
         run: |

@@ -50,13 +50,5 @@ jobs:
       run: |
         docker push ${{ secrets.DOCKER_USERNAME }}/${{ env.DOCKER_REPO }}:latest
 
-    - name: Create artifact with env variables
-      run: |
-        echo "DOCKER_TAG=latest" > env_vars.txt
-        echo "DOCKER_REPO=${{ env.DOCKER_REPO }}" >> env_vars.txt
-        # echo "ANOTHER_VAR=${{ env.ANOTHER_VAR }}" >> env_vars.txt
-
-    - uses: actions/upload-artifact@v2
-      with:
-        name: env-vars
-        path: env_vars.txt
+    - name: Set DOCKER_REPO environment variable (for CI Workflow)
+      run: echo "DOCKER_REPO=${{ env.DOCKER_REPO }}" >> $GITHUB_ENV  # Add this line

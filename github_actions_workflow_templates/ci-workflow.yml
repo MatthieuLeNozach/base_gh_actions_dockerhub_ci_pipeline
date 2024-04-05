@@ -6,31 +6,21 @@ on:
     types:
       - completed
 
-jobs:  # This line should align with 'on' to correctly define the 'jobs' section
+jobs:
   test:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
 
-      - name: Download artifact with env variables
-        uses: actions/download-artifact@v2
-        with:
-          name: env-vars
-          workflow: Docker Image CI
-          
-      - name: Load environment variables
+      - name: Pull the latest Docker Image (using DOCKER_REPO from previous workflow)
         run: |
-          cat env_vars.txt >> $GITHUB_ENV
-
-      - name: Pull the latest Docker Image
-        run: |
-          docker pull ${{ secrets.DOCKER_USERNAME }}/${{ env.DOCKER_REPO }}:latest
+          docker pull <span class="math-inline">\{\{ secrets\.DOCKER\_USERNAME \}\}/</span>{{ env.DOCKER_REPO }}:latest
 
       - name: Run tests with docker-compose
         run: |
           docker compose up --abort-on-container-exit --exit-code-from tests
-      
+
       - name: Clean up
         if: always()
         run: docker compose down
@@ -39,31 +29,18 @@ jobs:  # This line should align with 'on' to correctly define the 'jobs' section
         if: success()
         run: |
           echo "Tests passed successfully. Merging code changes..."
-          echo "::set-output name=status::success"
-          exit 1
-      
+          # Remove deprecated set-output command
+          exit 1  # Exit code indicates success
+
       - name: Notify failure
         if: failure()
         run: |
           echo "Tests failed, the code changes can't be merged"
-          echo "::set-output name=status::failure"
-          exit 1
+          # Remove deprecated set-output command
+          exit 1  # Exit code indicates failure
 
       # IF RUNNING FROM A SELF-HOSTED RUNNER, ENSURE gh CLI IS INSTALLED:
       # - name: Install GitHub CLI
       #   run: |
       #     curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
-      #     echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
-      #     sudo apt update
-      #     sudo apt install gh
-
-      - name: Update pull request status
-        if: always()
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          if [ "${{ steps.notify_success.outputs.status }}" == "success" ]; then
-            gh pr comment ${{ github.event.pull_request.number }} --body "Tests passed successfully. Merging the code changes..."
-          else
-            gh pr comment ${{ github.event.pull_request.number }} --body "Tests failed, the code changes can't be merged"
-          fi
+      #     echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.
