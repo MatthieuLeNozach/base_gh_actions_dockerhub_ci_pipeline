@@ -1,0 +1,9 @@
+FROM python:3.10
+
+WORKDIR /test
+
+COPY /test .
+
+RUN pip install --no-cache-dir pytest requests
+
+CMD bash -c "pytest -vv /test"

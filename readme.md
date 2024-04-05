@@ -1,1 +1,27 @@
 # **Dockerhub-GitHubActions Dockerimage CI pipeline**
+
+A simple CI pipeline to validate repository pushes and pull requests.  
+
+After a repository update, a docker image is published and pulled from dockerhub.com.
+Tests are run against the new images' container, the push or pull request become effective once the tests are successful.
+
+1. **Create a Dockerimage from a Dockerfile**
+    - ex. `docker create -t fastapi-slim:base .`
+2. **Tag the Dockerimage with dockerhub's username**
+    - ex. `docker tag fastapi-slim:base username/fastapi-slim:base`
+3. **Publish Dockerimage on a dockerhub.com repository**
+    - ex. `docker push username/fastapi-slim:base`
+4. **Add dockerhub.com secrets to the github repository**
+    - ex. "Settings" > "Secrets and Variables" > "Repository secrets":
+      - "New repository secret" > 
+        - "Name *" > `DOCKER_USERNAME`
+        - "Secret *" > `username`
+      - "New repository secret" > 
+        - "Name *" > `DOCKER_PASSWORD`
+        - "Secret *" > `password`
+5. **Modify `docker-publish.yml`**
+    - Fields env / DOCKER_REPO, DOCKER_TAG, DOCKERFILE
+6. **Move `docker-publish.yml` to `.github/workflows/`**
+
+
+**Move the Dockerfile used  a GitHub r

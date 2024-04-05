@@ -1,0 +1,25 @@
+version: '3.9'
+
+services:
+  app:
+    image: ${DOCKER_USERNAME}/${DOCKER_REPO}:${DOCKER_TAG}
+    ports:
+      - "8333:8000"
+    expose:
+      - "8000"
+    networks:
+      - test-network
+
+  tests:
+    build:
+      context: .
+      dockerfile: test/Dockerfile.test
+    depends_on:
+      - app
+    networks:
+      - test-network
+    environment:
+      - APP_BASE_URL=http://app:8000
+
+networks:
+  test-network:
