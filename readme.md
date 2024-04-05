@@ -46,4 +46,4 @@ Tests are run against the new images' container, the push or pull request become
     -  **docker-publish:SUCCESS, ci-workflow:FAILURE**
   - 17h56 test without artifacts4   dd qd
   - Test with preexistent env figr"gle instead of env variables and artifacts
--dczf DBREZFBVgbaevrf
+-dczf DBREZFBVgbaevrfhtbg'éteg
