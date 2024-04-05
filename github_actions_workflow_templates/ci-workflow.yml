@@ -15,7 +15,7 @@ jobs:
 
       - name: Pull the latest Docker Image
         run: |
-          docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:latest
+          docker pull ${{ secrets.DOCKER_USERNAME }}/${{ github.event.workflow_run.head_repository.name }}:latest
 
       - name: Run tests with docker-compose
         run: |
@@ -29,14 +29,12 @@ jobs:
         if: success()
         run: |
           echo "Tests passed successfully. Merging code changes..."
-          # Remove deprecated set-output command
-          exit 1  # Exit code indicates success
+          exit 0  # Exit code indicates success
 
       - name: Notify failure
         if: failure()
         run: |
           echo "Tests failed, the code changes can't be merged"
-          # Remove deprecated set-output command
           exit 1  # Exit code indicates failure
 
       # IF RUNNING FROM A SELF-HOSTED RUNNER, ENSURE gh CLI IS INSTALLED:
