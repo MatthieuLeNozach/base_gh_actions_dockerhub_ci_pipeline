@@ -42,4 +42,4 @@ Tests are run against the new images' container, the push or pull request become
     -  **docker-publish:SUCCESS, ci-workflow:FAILURE**
   - 17h41 small modif in `ci-workflow.yml`
     -  **docker-publish:SUCCESS, ci-workflow:FAILURE**
-  - 17h51 test without artifacts
+  - 17h51 test without artifacts 
