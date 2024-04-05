@@ -13,9 +13,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Pull the latest Docker Image (using DOCKER_REPO from previous workflow)
+      - name: Pull the latest Docker Image
         run: |
-          docker pull <span class="math-inline">\{\{ secrets\.DOCKER\_USERNAME \}\}/</span>{{ env.DOCKER_REPO }}:latest
+          docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:latest
 
       - name: Run tests with docker-compose
         run: |
