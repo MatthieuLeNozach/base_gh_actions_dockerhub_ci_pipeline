@@ -5,6 +5,8 @@ A simple CI pipeline to validate repository pushes and pull requests.
 After a repository update, a docker image is published and pulled from dockerhub.com.
 Tests are run against the new images' container, the push or pull request become effective once the tests are successful.
 
+
+## **A. Publish Docker image**
 1. **Create a Dockerimage from a Dockerfile**
     - ex. `docker create -t fastapi-slim:base .`
 2. **Tag the Dockerimage with dockerhub's username**
@@ -23,5 +25,8 @@ Tests are run against the new images' container, the push or pull request become
     - Fields env / DOCKER_REPO, DOCKER_TAG, DOCKERFILE
 6. **Move `docker-publish.yml` to `.github/workflows/`**
 
+## **B. Trigger automated testing**
 
-**Move the Dockerfile used  a GitHub r
+7. **Move `ci-workflow.yml` to `.github/workflows/`**
+8. **Make changes to `main.py` and commit / push**
+
