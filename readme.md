@@ -30,3 +30,8 @@ Tests are run against the new images' container, the push or pull request become
 7. **Move `ci-workflow.yml` to `.github/workflows/`**
 8. **Make changes to `main.py` and commit / push**
 
+
+
+#### **Attempts logs**
+- 240305:
+  - 16h22 modified secrets
