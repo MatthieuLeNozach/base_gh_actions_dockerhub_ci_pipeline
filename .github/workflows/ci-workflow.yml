@@ -17,7 +17,8 @@ jobs:  # This line should align with 'on' to correctly define the 'jobs' section
         uses: actions/download-artifact@v2
         with:
           name: env-vars
-
+          workflow: Docker Image CI
+          
       - name: Load environment variables
         run: |
           cat env_vars.txt >> $GITHUB_ENV
