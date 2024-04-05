@@ -3,8 +3,16 @@ name: Docker Image CI
 on:
   push:
     branches: [ main ]
+    paths:
+      - '/app/**'
+      - '/test/**'
+      - 'readme.md' # Readme modifications trigger CI pipeline for testing purposes
   pull_request:
     branches: [ main ]
+    paths:
+      - '/app/**'
+      - '/test/**'
+      - 'readme.md' # Readme modifications trigger CI pipeline for testing purposes
 
 env:
   DOCKER_REPO: fastapi-slim
@@ -17,24 +25,38 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+
     - name: Extract repo name
       run: echo "REPO_NAME=$(echo ${GITHUB_REPOSITORY#*/})" >> $GITHUB_ENV
+
     - name: Get current timestamp
       run: echo "TIMESTAMP=$(date +%Y%m%d%H%M%S)" >> $GITHUB_ENV
+
     - name: Build the Docker Image
-      run: docker build ./app --file ${{ env.DOCKERFILE_PATH }} --tag ${{ env.DOCKER_REPO }}:${{ env.DOCKER_TAG }}-${{ env.TIMESTAMP }}
+      run: |
+        docker build ./app --file ${{ env.DOCKERFILE_PATH }} --tag ${{ env.DOCKER_REPO }}:${{ env.DOCKER_TAG }}-${{ env.TIMESTAMP }}
+
     - name: Log into Docker Hub
       uses: docker/login-action@v1
       with:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
+
     - name: Push the Docker Image
       run: |
         docker tag ${{ env.DOCKER_REPO }}:${{ env.DOCKER_TAG }}-${{ env.TIMESTAMP }} ${{ secrets.DOCKER_USERNAME }}/${{ env.DOCKER_REPO }}:${{ env.DOCKER_TAG }}-${{ env.TIMESTAMP }}
         docker push ${{ secrets.DOCKER_USERNAME }}/${{ env.DOCKER_REPO }}:${{ env.DOCKER_TAG }}-${{ env.TIMESTAMP }}
-    - name: Create artifact
-      run: echo ${{ env.DOCKER_TAG }} > tag.txt
+
+    - name: Create artifact with env variables
+      run: |
+        echo "DOCKER_TAG=${{ env.DOCKER_TAG }}-${{ env.TIMESTAMP }}" > env_vars.txt
+        echo "DOCKER_REPO=${{ env.DOCKER_REPO }}" >> env_vars.txt
+        # Add any other environment variables in the same fashion
+        # echo "ANOTHER_VAR=${{ env.ANOTHER_VAR }}" >> env_vars.txt
+
     - uses: actions/upload-artifact@v2
       with:
-        name: image-tag
-        path: tag.txt
+        name: env-vars
+        path: env_vars.txt
+
+

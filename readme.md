@@ -35,4 +35,5 @@ Tests are run against the new images' container, the push or pull request become
 #### **Attempts logs**
 - 240305:
   - 16h22 modified secrets
-  - 16h30 fixed typo **SUCCESS**
+  - 16h30 fixed typo **docker-publish:SUCCESS, ci-workflow:FAILURE**
+  - 17h15 fixed bugs in `ci-workflow.yml`

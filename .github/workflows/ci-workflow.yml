@@ -6,22 +6,21 @@ on:
     types:
       - completed
 
-jobs:
-
+jobs:  # This line should align with 'on' to correctly define the 'jobs' section
   test:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout completed
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-      - name: Download artifact
+      - name: Download artifact with env variables
         uses: actions/download-artifact@v2
         with:
-          name: image-tag
+          name: env-vars
 
-      - name: Read image tag
-        run: echo "DOCKER_TAG=$(cat tag.txt)" >> $GITHUB_ENV
+      - name: Load environment variables
+        run: |
+          cat env_vars.txt >> $GITHUB_ENV
 
       - name: Pull the latest Docker Image
         run: |
@@ -49,28 +48,21 @@ jobs:
           echo "::set-output name=status::failure"
           exit 1
 
-
-# IF RUNNING FROM A SELF-HOSTED RUNNER, ENSURE gh CLI IS INSTALLED:
-#      - name: Install GitHub CLI
-#        run: |
-#          curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
-#          echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
-#          sudo apt update
-#          sudo apt install gh
+      # IF RUNNING FROM A SELF-HOSTED RUNNER, ENSURE gh CLI IS INSTALLED:
+      # - name: Install GitHub CLI
+      #   run: |
+      #     curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+      #     echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+      #     sudo apt update
+      #     sudo apt install gh
 
       - name: Update pull request status
         if: always()
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          if [ "${{ steps.notify_success.outputs.status }} == "success ]; then
+          if [ "${{ steps.notify_success.outputs.status }}" == "success" ]; then
             gh pr comment ${{ github.event.pull_request.number }} --body "Tests passed successfully. Merging the code changes..."
           else
             gh pr comment ${{ github.event.pull_request.number }} --body "Tests failed, the code changes can't be merged"
           fi
-
-
-
-
-
-
