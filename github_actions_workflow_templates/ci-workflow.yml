@@ -24,7 +24,7 @@ jobs:  # This line should align with 'on' to correctly define the 'jobs' section
 
       - name: Pull the latest Docker Image
         run: |
-          docker pull ${{ secrets.DOCKER_USERNAME }}/${{ env.DOCKER_REPO }}:${{ env.DOCKER_TAG }}
+          docker pull ${{ secrets.DOCKER_USERNAME }}/${{ env.DOCKER_REPO }}:latest
 
       - name: Run tests with docker-compose
         run: |

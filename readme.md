@@ -36,4 +36,7 @@ Tests are run against the new images' container, the push or pull request become
 - 240305:
   - 16h22 modified secrets
   - 16h30 fixed typo **docker-publish:SUCCESS, ci-workflow:FAILURE**
-  - 17h15 fixed bugs in `ci-workflow.yml`
+  - 17h15 fixed bugs in `ci-workflow.yml`:
+    -  **docker-publish:SUCCESS, ci-workflow:FAILURE**
+  - 17h28 docker image is published with both timestamp and `latest` tag, `ci-workflow` will use `latest` tag instead of timestamp
+    - 
